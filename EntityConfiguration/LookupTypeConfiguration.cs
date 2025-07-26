@@ -10,6 +10,7 @@ namespace Backend.EntityConfiguration
         {
             builder.ToTable("LookupTypes");
 
+            // Id - IsDeleted - CreationDate
             builder.Property(x => x.Id)
                    .IsRequired()
                    .HasMaxLength(5)
@@ -21,16 +22,22 @@ namespace Backend.EntityConfiguration
             builder.Property(x => x.CreationDate)
                    .HasDefaultValueSql("GETDATE()");
 
+
+            // Name - Code - IconPath
             builder.Property(x => x.Name)
                    .IsUnicode(true)
                    .IsRequired()
                    .HasMaxLength(70);
 
+
+            // Relationship
             builder.HasMany<LookupItem>()
                    .WithOne()
                    .HasForeignKey(x => x.LookupTypeId)
                    .OnDelete(DeleteBehavior.Cascade);
 
+
+            // Seed Date
             builder.HasData(
                 new LookupType
                 {

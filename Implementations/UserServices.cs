@@ -5,16 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Implementations;
 
-public class UserServices : IUserServices
+public class UserServices(CatalogContext context, IConfiguration config) : IUserServices
 {
-    private readonly CatalogContext _context;
-    private readonly IConfiguration _config;
-
-    public UserServices(CatalogContext context, IConfiguration config)
-    {
-        _context = context;
-        _config = config;
-    }
+    private readonly CatalogContext _context = context;
+    private readonly IConfiguration _config = config;
 
     public async Task<string?> AuthenticateAsync(string username, string password)
     {

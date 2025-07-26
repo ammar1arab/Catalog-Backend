@@ -2,14 +2,10 @@
 
 namespace Backend.Helpers
 {
-    public class PasswordHelper
+    public class PasswordHelper(IDataProtectionProvider provider)
     {
-        private readonly IDataProtector _protector;
-
-        public PasswordHelper(IDataProtectionProvider provider)
-        {
-            _protector = provider.CreateProtector("ConnectionStringsProtector");
-        }
+        private readonly IDataProtector _protector = provider.CreateProtector("ConnectionStringsProtector");
+        private readonly SimpleEncryptionHelper _simpleEncryptionHelper = new SimpleEncryptionHelper();
 
         public string Encrypt(string plainText)
         {
@@ -29,6 +25,16 @@ namespace Backend.Helpers
         public static bool VerifyPassword(string password, string hash)
         {
             return BCrypt.Net.BCrypt.Verify(password, hash);
+        }
+
+        public string EncryptWithSimple(string plainText)
+        {
+            return _simpleEncryptionHelper.MapingStringForEncryption(plainText);
+        }
+
+        public string DecryptWithSimple(string encryptedText)
+        {
+            return _simpleEncryptionHelper.MapingStringForEncryption(encryptedText);
         }
     }
 }

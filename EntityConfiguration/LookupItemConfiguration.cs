@@ -10,6 +10,7 @@ namespace Backend.EntityConfiguration
         {
             builder.ToTable("LookupItems");
 
+            // Id - IsDeleted - CreationDate
             builder.Property(x => x.Id)
                    .IsRequired()
                    .HasMaxLength(5)
@@ -21,6 +22,8 @@ namespace Backend.EntityConfiguration
             builder.Property(x => x.CreationDate)
                    .HasDefaultValueSql("GETDATE()");
 
+
+            // Name - Code - IconPath
             builder.Property(x => x.Name)
                    .IsRequired()
                    .HasMaxLength(100);
@@ -32,6 +35,8 @@ namespace Backend.EntityConfiguration
             builder.Property(x => x.IconPath)
                    .HasMaxLength(300);
 
+
+            // Seed Date
             builder.HasData(
                 new LookupItem
                 {

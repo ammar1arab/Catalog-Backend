@@ -10,6 +10,7 @@ namespace Backend.EntityConfiguration
         {
             builder.ToTable("SubThrees");
 
+            // Id - IsDeleted - CreationDate
             builder.Property(x => x.Id)
                    .IsRequired()
                    .HasMaxLength(5)
@@ -22,6 +23,7 @@ namespace Backend.EntityConfiguration
                    .IsRequired()
                    .HasDefaultValueSql("GETDATE()");
 
+            // Name - Image
             builder.Property(x => x.Name)
                    .IsRequired()
                    .IsUnicode(true)
@@ -33,8 +35,8 @@ namespace Backend.EntityConfiguration
                    .HasMaxLength(1000)
                    .IsRequired(false);
 
+            // Relationships - 3
             builder.Property(x => x.GroupId).IsRequired();
-
             builder.Property(x => x.SubOneId).IsRequired();
 
             builder.HasOne<Group>()

@@ -98,14 +98,9 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
 
-// ✅ Data Protection and Helper
-builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), "CatalogKeys")))
-    .SetApplicationName("Catalog-App");
-
 builder.Services.AddSingleton<PasswordHelper>();
 
-// ✅ Decrypt DB password if needed
+// ✅ Decrypt DB password 
 using (var scope = builder.Services.BuildServiceProvider().CreateScope())
 {
     var passwordHelper = scope.ServiceProvider.GetRequiredService<PasswordHelper>();
@@ -113,19 +108,24 @@ using (var scope = builder.Services.BuildServiceProvider().CreateScope())
     var rawConnectionString = config.GetConnectionString("CatalogConnection")!;
     string finalConnectionString = rawConnectionString;
 
-    if (rawConnectionString.Contains("Password=ENC_"))
+    var parts = rawConnectionString.Split(';');
+    for (int i = 0; i < parts.Length; i++)
     {
-        var start = rawConnectionString.IndexOf("Password=ENC_") + "Password=ENC_".Length;
-        var end = rawConnectionString.IndexOf(';', start);
-        var encrypted = rawConnectionString.Substring(start, end - start);
-
-        var decrypted = passwordHelper.Decrypt(encrypted);
-        finalConnectionString = rawConnectionString.Replace("Password=ENC_" + encrypted, $"Password={decrypted}");
+        if (parts[i].StartsWith("Password=", StringComparison.OrdinalIgnoreCase))
+        {
+            var encryptedPassword = parts[i].Substring("Password=".Length);
+            var decryptedPassword = passwordHelper.DecryptWithSimple(encryptedPassword);
+            parts[i] = $"Password={decryptedPassword}";
+            break;
+        }
     }
+
+    finalConnectionString = string.Join(";", parts);
 
     builder.Services.AddDbContext<CatalogContext>(options =>
         options.UseSqlServer(finalConnectionString));
 }
+
 
 // ✅ Application Services
 builder.Services.AddScoped<ICategoriesServices, CategoriesServices>();

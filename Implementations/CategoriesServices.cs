@@ -103,7 +103,7 @@ namespace Backend.Implementations
                 ?? throw new KeyNotFoundException("Group doesn't exist");
 
             if (!string.IsNullOrEmpty(group.Image) && group.Image != "no-image.png")
-                throw new InvalidOperationException("Group already has image");
+                DeleteCategoryImage(group.Image);
 
             group.Image = await UploadCategoryImageAsync(file);
             await _context.SaveChangesAsync();
@@ -115,7 +115,7 @@ namespace Backend.Implementations
                 ?? throw new KeyNotFoundException("SubOne doesn't exist");
 
             if (!string.IsNullOrEmpty(subOne.Image)  && subOne.Image != "no-image.png")
-                throw new InvalidOperationException("SubOne already has image");
+                DeleteCategoryImage(subOne.Image);
 
             subOne.Image = await UploadCategoryImageAsync(file);
             await _context.SaveChangesAsync();
@@ -127,7 +127,7 @@ namespace Backend.Implementations
                 ?? throw new KeyNotFoundException("SubTwo doesn't exist");
 
             if (!string.IsNullOrEmpty(subTwo.Image)  && subTwo.Image != "no-image.png")
-                throw new InvalidOperationException("SubTwo already has image");
+                DeleteCategoryImage(subTwo.Image);
 
             subTwo.Image = await UploadCategoryImageAsync(file);
             await _context.SaveChangesAsync();
@@ -139,7 +139,7 @@ namespace Backend.Implementations
                 ?? throw new KeyNotFoundException("SubThree doesn't exist");
 
             if (!string.IsNullOrEmpty(subThree.Image)  && subThree.Image != "no-image.png")
-                throw new InvalidOperationException("SubThree already has image");
+                DeleteCategoryImage(subThree.Image);
 
             subThree.Image = await UploadCategoryImageAsync(file);
             await _context.SaveChangesAsync();

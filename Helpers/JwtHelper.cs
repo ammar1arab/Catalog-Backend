@@ -10,11 +10,10 @@ public static class JwtHelper
 	public static string GenerateToken(string username, string role, IConfiguration config)
 	{
 		var claims = new[]
-{
-	new Claim(ClaimTypes.Name, username),
-	new Claim("role", role)
-};
-
+		{
+			new Claim(ClaimTypes.Name, username),
+			new Claim("role", role)
+		};
 
 		var key = new SymmetricSecurityKey(
 			Encoding.UTF8.GetBytes(config["Jwt:Key"]!)

@@ -217,7 +217,7 @@ namespace Backend.Implementations
             var item = await _context.Items.FindAsync(itemNo);
             if (item == null) return false;
 
-            item.Description = description?.Trim()!;
+            item.Description = description;
             await _context.SaveChangesAsync();
             return true;
         }
