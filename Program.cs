@@ -3,7 +3,6 @@ using Backend.Implementations;
 using Backend.Interfaces;
 using Backend.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
